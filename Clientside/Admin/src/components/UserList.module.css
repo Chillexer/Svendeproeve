@@ -1,0 +1,32 @@
+.userlist {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(50px, auto)) 140px;
+	grid-template-rows: repeat(auto-fill);
+	width: 100%;
+}
+
+.userlist > div {
+	padding: 7px 15px;
+	display: flex;
+	align-items: center;
+	border-bottom: 1px solid rgb(155, 155, 155);
+}
+
+.userlist > div > span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.userlist > div:nth-child(-n + 5) {
+	height: 60px;
+	font-weight: bold;
+}
+
+.userlist > div:nth-child(10n + 6),
+.userlist > div:nth-child(10n + 7),
+.userlist > div:nth-child(10n + 8),
+.userlist > div:nth-child(10n + 9),
+.userlist > div:nth-child(10n + 10) {
+	background-color: #fafafa;
+}

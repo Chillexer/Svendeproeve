@@ -1,0 +1,33 @@
+.inventorylist {
+	display: grid;
+	grid-template-columns: repeat(5, minmax(50px, auto)) 140px;
+	grid-template-rows: repeat(auto-fill);
+	width: 100%;
+}
+
+.inventorylist > div {
+	padding: 7px 15px;
+	display: flex;
+	align-items: center;
+	border-bottom: 1px solid rgb(155, 155, 155);
+}
+
+.inventorylist > div > span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.inventorylist > div:nth-child(-n + 6) {
+	height: 60px;
+	font-weight: bold;
+}
+
+.inventorylist > div:nth-child(12n + 7),
+.inventorylist > div:nth-child(12n + 8),
+.inventorylist > div:nth-child(12n + 9),
+.inventorylist > div:nth-child(12n + 10),
+.inventorylist > div:nth-child(12n + 11),
+.inventorylist > div:nth-child(12n + 12) {
+	background-color: #fafafa;
+}

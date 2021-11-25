@@ -1,0 +1,45 @@
+version: "3"
+services:
+  shop:
+    domainname: "svendeproeveshop"
+    build:
+      context: /Clientside
+      dockerfile: /docker/shop/Dockerfile.azure
+    image: frederikfoss/shop:azure
+    deploy:
+      resources:
+        reservations:
+          cpus: '2.99'
+          memory: 4G
+        limits:
+          cpus: '2.99'
+          memory: 4G
+    ports:
+      - "80:80"
+    env_file:
+      - .env.azure
+    volumes: 
+      - volshopdata:/app/.next/cache/images
+  shopapi:
+    domainname: "svendeproeveshop"
+    build:
+      context: /Serverside
+      dockerfile: /docker/shop/Dockerfile
+    image: frederikfoss/shopapi:azure
+    deploy:
+      resources:
+        reservations:
+          cpus: '1'
+          memory: 2G
+    ports:
+      - "3030:3030"
+    environment:
+      - ASPNETCORE_URLS=http://+:3030
+    env_file:
+      - .env.azure
+volumes:
+  volshopdata:
+    driver: azure_file
+    driver_opts:
+     share_name: volshopdata
+     storage_account_name: svendeproevestorage

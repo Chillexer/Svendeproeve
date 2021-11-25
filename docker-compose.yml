@@ -1,0 +1,110 @@
+version: "3"
+services:
+  shop:
+    build:
+      context: /Clientside
+      dockerfile: /docker/shop/Dockerfile
+    image: frederikfoss/shop
+    ports:
+      - "3001:3001"
+    depends_on:
+      - shopapi
+    env_file:
+      - .env
+    volumes: 
+      - ${DATAPATH}/Shop/Images:/app/.next/cache/images
+  admin:
+    build:
+      context: /Clientside
+      dockerfile: /docker/admin/Dockerfile
+    image: frederikfoss/admin
+    ports:
+      - "3000:3000"
+    depends_on:
+      - adminapi
+      - userapi
+    env_file:
+      - .env
+    volumes:
+      - ${DATAPATH}/Admin/Images:/app/.next/cache/images
+  shopapi:
+    build:
+      context: /Serverside
+      dockerfile: /docker/shop/Dockerfile
+    image: frederikfoss/shopapi
+    ports:
+      - "3030:3030"
+      - "3031:3031"
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_URLS=https://+:3031;http://+:3030
+    env_file:
+      - .env
+    volumes:
+      - ~/.aspnet/https:/https:ro
+  adminapi:
+    build:
+      context: /Serverside
+      dockerfile: /docker/admin/Dockerfile
+    image: frederikfoss/adminapi
+    ports:
+      - "3020:3020"
+      - "3021:3021"
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_URLS=https://+:3021;http://+:3020
+    env_file:
+      - .env
+    volumes:
+      - ~/.aspnet/https:/https:ro
+  userapi:
+    build:
+      context: /Serverside
+      dockerfile: /docker/user/Dockerfile
+    image: frederikfoss/userapi
+    ports:
+      - "3010:3010"
+      - "3011:3011"
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_URLS=https://+:3011;http://+:3010
+    env_file:
+      - .env
+    volumes:
+      - ~/.aspnet/https:/https:ro
+  db:
+    image: "mcr.microsoft.com/mssql/server"
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "y"
+    env_file:
+      - .env
+    volumes:
+      - ${DATAPATH}/MSSQL/Data:/var/opt/mssql/data
+    command:
+      - /bin/bash
+      - -c
+      - |
+        /opt/mssql/bin/sqlservr &
+        pid=$$!
+
+        echo "Waiting for MS SQL to be available ⏳"
+        /opt/mssql-tools/bin/sqlcmd -l 30 -S localhost -h-1 -V1 -U sa -P $$SA_PASSWORD -Q "SET NOCOUNT ON SELECT \"YAY WE ARE UP\" , @@servername"
+        is_up=$$?
+        while [ $$is_up -ne 0 ] ; do
+          echo -e $$(date)
+          /opt/mssql-tools/bin/sqlcmd -l 30 -S localhost -h-1 -V1 -U sa -P $$SA_PASSWORD -Q "SET NOCOUNT ON SELECT \"YAY WE ARE UP\" , @@servername"
+          is_up=$$?
+          sleep 5
+        done
+
+        for foo in /scripts/*.sql
+          do /opt/mssql-tools/bin/sqlcmd -U sa -P $$SA_PASSWORD -l 30 -e -i $$foo
+        done
+        echo "All scripts have been executed. Waiting for MS SQL(pid $$pid) to terminate."
+
+        wait $$pid

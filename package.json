@@ -1,0 +1,26 @@
+{
+	"name": "svendeproeve",
+	"version": "1.0.0",
+	"description": "TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project.",
+	"main": "index.js",
+	"scripts": {
+		"build": "docker-compose --project-name svendeproeve build",
+		"build-azure": "docker-compose --project-name svendeproeve --file docker-compose-azure-shop.yml build && docker-compose --project-name svendeproeve --file docker-compose-azure-admin.yml build",
+		"up": "docker-compose --project-name svendeproeve up -d",
+		"down": "docker-compose --project-name svendeproeve down",
+		"push": "docker-compose --project-name svendeproeve push",
+		"doall-azure": "npm run build-azure && npm run push-azure && npm run up-azure",
+		"push-azure": "docker-compose --project-name svendeproeve --file docker-compose-azure-shop.yml push && docker-compose --project-name svendeproeve --file docker-compose-azure-admin.yml push",
+		"up-azure": "docker context use shopcontext && docker compose --file docker-compose-azure-admin.yml --project-name svendeproeve-admin up && docker compose --file docker-compose-azure-shop.yml --project-name svendeproeve-shop up && docker context use default",
+		"down-azure": "docker context use shopcontext && docker compose --file docker-compose-azure-admin.yml --project-name svendeproeve-admin down && docker compose --file docker-compose-azure-shop.yml --project-name svendeproeve-shop down && docker context use default",
+		"clean-cert": "dotnet dev-certs https --clean",
+		"create-cert": "dotnet dev-certs https -v -ep ./https/aspnetapp.pfx -p Svendeproeve2021",
+		"trust-cert": "dotnet dev-certs https --trust"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://TecSvendeproeve@dev.azure.com/TecSvendeproeve/Svendepr%C3%B8ve/_git/Svendepr%C3%B8ve"
+	},
+	"author": "",
+	"license": "ISC"
+}

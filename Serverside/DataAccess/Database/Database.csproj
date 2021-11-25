@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>FNO.DataAccess.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>FNO.DataAccess.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Data\SeedData\Categories.csv" />
+    <None Remove="Data\SeedData\Colors.csv" />
+    <None Remove="Data\SeedData\Genders.csv" />
+    <None Remove="Data\SeedData\ProductsAndVariants.json" />
+    <None Remove="Data\SeedData\Sizes.csv" />
+    <None Remove="Mail\Templates\DiscountPriceTemplate.html" />
+    <None Remove="Mail\Templates\MailTemplate.html" />
+    <None Remove="Mail\Templates\PriceTemplate.html" />
+    <None Remove="Mail\Templates\ProductTemplate.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Data\SeedData\ProductsAndVariants.json" />
+    <EmbeddedResource Include="Data\SeedData\Sizes.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Data\SeedData\Categories.csv" />
+    <EmbeddedResource Include="Data\SeedData\Colors.csv" />
+    <EmbeddedResource Include="Data\SeedData\Genders.csv" />
+    <EmbeddedResource Include="Mail\Templates\DiscountPriceTemplate.html" />
+    <EmbeddedResource Include="Mail\Templates\MailTemplate.html" />
+    <EmbeddedResource Include="Mail\Templates\PriceTemplate.html" />
+    <EmbeddedResource Include="Mail\Templates\ProductTemplate.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="27.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

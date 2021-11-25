@@ -1,0 +1,65 @@
+version: "3"
+services:
+  admin:
+    domainname: "svendeproeveadmin"
+    build:
+      context: /Clientside
+      dockerfile: /docker/admin/Dockerfile.azure
+    image: frederikfoss/admin:azure
+    deploy:
+      resources:
+        reservations:
+          cpus: '1.79'
+          memory: 4G
+        limits:
+          cpus: '1.79'
+          memory: 4G
+    depends_on:
+      - adminapi
+      - userapi
+    ports:
+      - "80:80"
+    env_file:
+      - .env.azure
+    volumes:
+      - voladmindata:/app/.next/cache/images
+  adminapi:
+    domainname: "svendeproeveadmin"
+    build:
+      context: /Serverside
+      dockerfile: /docker/admin/Dockerfile
+    image: frederikfoss/adminapi:azure
+    deploy:
+      resources:
+        reservations:
+          cpus: '1.1'
+          memory: 2G
+    ports:
+      - "3020:3020"
+    environment:
+      - ASPNETCORE_URLS=http://+:3020
+    env_file:
+      - .env.azure
+  userapi:
+    domainname: "svendeproeveadmin"
+    build:
+      context: /Serverside
+      dockerfile: /docker/user/Dockerfile
+    image: frederikfoss/userapi:azure
+    deploy:
+      resources:
+        reservations:
+          cpus: '1.1'
+          memory: 2G
+    ports:
+      - "3010:3010"
+    environment:
+      - ASPNETCORE_URLS=http://+:3010
+    env_file:
+      - .env.azure
+volumes:
+  voladmindata:
+    driver: azure_file
+    driver_opts:
+     share_name: voladmindata
+     storage_account_name: svendeproevestorage

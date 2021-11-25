@@ -1,0 +1,33 @@
+.orderitemlist {
+	display: grid;
+	grid-template-columns: repeat(6, minmax(50px, auto));
+	grid-template-rows: repeat(auto-fill);
+	width: 100%;
+}
+
+.orderitemlist>div {
+	padding: 7px 15px;
+	display: flex;
+	align-items: center;
+	border-bottom: 1px solid rgb(155, 155, 155);
+}
+
+.orderitemlist>div>span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.orderitemlist>div:nth-child(-n + 6) {
+	height: 60px;
+	font-weight: bold;
+}
+
+.orderitemlist>div:nth-child(12n + 7),
+.orderitemlist>div:nth-child(12n + 8),
+.orderitemlist>div:nth-child(12n + 9),
+.orderitemlist>div:nth-child(12n + 10),
+.orderitemlist>div:nth-child(12n + 11),
+.orderitemlist>div:nth-child(12n + 12) {
+	background-color: #fafafa;
+}
